@@ -6,15 +6,23 @@ import { loginValidationSchema } from "../schemas/loginValidatorSchema"
 import { TextInput } from "../components/TextInput"
 import { Button } from "../components/Button"
 
-interface IHandleSubmit {
+interface IValues {
     email: string
     password: string
 }
 
 export const SignIn = () => {
-    const handleSubmit = ({ email, password }: IHandleSubmit) => {
+    const handleSubmit = ({ email, password }: IValues) => {
         console.log(email, password)
     }
+
+    const validate = ({ email }: IValues) => {
+        if (["admin", "null", "god", "undefined"].includes(email)) {
+          return {
+            email: "Haha nice try 😁!"
+          }
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -24,6 +32,7 @@ export const SignIn = () => {
             initialValues={{ email: '', password: '' }}
             onSubmit={values => console.log(values)}
             validationSchema={loginValidationSchema}
+            validate={validate}
           >
             {({ handleChange, handleBlur, values, errors, isValid }) => (
               <>
@@ -34,6 +43,7 @@ export const SignIn = () => {
                   value={values.email}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  autoCorrect={false}
                   error={errors.email}
                 />
 
